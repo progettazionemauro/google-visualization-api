@@ -1,60 +1,64 @@
 <!DOCTYPE html>
-<html style="background-color:lightgrey;">
+<html style="background-color: lightgrey">
   <head>
-  
     <!--Load the AJAX API-->
     <!-- VEDERE STEP BY STEP: https://developers.google.com/chart/interactive/docs/basic_load_libs -->
     <!-- 1) CARICA IL WEBPACK - ANCHE SE VI SONO PIU' CHART VA CARICATO SOLTANTO UNA VOLTA -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations.min.js"></script>
-    
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations.min.js"></script> -->
+
     <script></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
     <script type="text/javascript">
- 
       // 2) Load the Visualization API and the controls package
       // 2 BIS) PER VEDERE I TIPI DI CHART: https://developers.google.com/chart/interactive/docs/gallery/table
-      google.charts.load('current', {'packages':['table']});
-      
+      google.charts.load("current", { packages: ["table"] });
 
       // 3) Set a callback to run when the Google Visualization API is loaded. VEDERE QUI: https://developers.google.com/chart/interactive/docs/basic_load_libs#Callback
       google.charts.setOnLoadCallback(drawSheetName);
 
-
       // 4) Callback that creates and populates a data table,
       // instantiates a dashboard, a range slider and a pie chart,
       // passes in the data and draws it.
-    
+
       // 5)  RECUPERARE I DATI IN REMOTO. VEDERE QUI: https://developers.google.com/chart/interactive/docs/spreadsheets#sheet-name
       // PER IMPOSTAZIONE GENERALE VEDERE QUI: https://developers.google.com/chart/interactive/docs/basic_preparing_data
 
       // ATTENZIONE QUANDO IL DATO E' IN REMOTO VA INSTANZIATA UNA QUERY (QUESTA FUNZIONE ALLA QUALE POI VERRA' DATA LA RISPOSTA IN VAR DATA=RESPONSE.GETDATATABLE())
-     
-        function drawSheetName() {
-        const url = 'https://docs.google.com/spreadsheets/d/';
-        const ssid = '1VpvFEYZZu5lu9qCkRwXlOkZxLHBkiGcytF8O1w-5bBA';
-        const q1 = '/gviz/tq?';
-        const q2 = 'tqx=out:json';
-        const q3 = 'sheet=Foglio1';
-           // per EncodeURI: vedere QUI: http://www.javascripter.net/faq/escape-encodeuri-lower-ascii.htm
-        //const queryString = encodeURIComponent('SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8'); 
-        queryString="";
-      
+
+      function drawSheetName() {
+        const url = "https://docs.google.com/spreadsheets/d/";
+        const ssid = "1VpvFEYZZu5lu9qCkRwXlOkZxLHBkiGcytF8O1w-5bBA";
+        const q1 = "/gviz/tq?";
+        const q2 = "tqx=out:json";
+        const q3 = "sheet=Foglio1";
+        // per EncodeURI: vedere QUI: http://www.javascripter.net/faq/escape-encodeuri-lower-ascii.htm
+        //const queryString = encodeURIComponent('SELECT A, H, O, Q, R, U LIMIT 5 OFFSET 8');
+        queryString = "";
+
         let url1 = `${url}${ssid}${q1}&${q2}&${q3}&${queryString}`;
         console.log(url);
-     
-        var query = new google.visualization.Query(url1);
-      query.send(handleSampleDataQueryResponse);
-    }
 
-    // POSSIBILE SOLUZIONE A RESPONSE: https://stackoverflow.com/questions/37880267/google-chart-passing-query-results-to-google-charts
-  function handleSampleDataQueryResponse(response) {
-      if (response.isError()) {
-        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-        return;
+        var query = new google.visualization.Query(url1);
+        query.send(handleSampleDataQueryResponse);
       }
 
+      // POSSIBILE SOLUZIONE A RESPONSE: https://stackoverflow.com/questions/37880267/google-chart-passing-query-results-to-google-charts
+      function handleSampleDataQueryResponse(response) {
+        if (response.isError()) {
+          alert(
+            "Error in query: " +
+              response.getMessage() +
+              " " +
+              response.getDetailedMessage()
+          );
+          return;
+        }
+
         // 5 bis) RISPOSTA DELLA QUERY
-    /*   var data = response.getDataTable();
+        /*   var data = response.getDataTable();
       visualization = new google.visualization.Table(document.getElementById('visualization'));
       visualization.draw(data,
            {title:"Response Graph for "+document.myform.ansSet.value,
@@ -63,123 +67,192 @@
             vAxis: {title: "Answer Options"},
             hAxis: {title: "Responses"}}
       ); */
-      
 
-      // 6) CUSTOMIZE THE CHART: https://developers.google.com/chart/interactive/docs/basic_customizing_chart
+        // 6) CUSTOMIZE THE CHART: https://developers.google.com/chart/interactive/docs/basic_customizing_chart
 
-      // 6 bis) PER I DETTAGLI SU LE OPTION PER TABLE VEDERE QUI: https://developers.google.com/chart/interactive/docs/gallery/table
-      // VEDERE QUI PER I SETTINGS: https://developers.google.com/chart/interactive/docs/reference  
-    
+        // 6 bis) PER I DETTAGLI SU LE OPTION PER TABLE VEDERE QUI: https://developers.google.com/chart/interactive/docs/gallery/table
+        // VEDERE QUI PER I SETTINGS: https://developers.google.com/chart/interactive/docs/reference
 
-      var options = {
-          'legend':'left',
-          'title':'My Big Pie Chart',
-          'is3D':true,
-          'width':400,
-          'height':300
-        } 
+        // 7) RISPOSTA ALL'ISTANZA
 
-    // 7) RISPOSTA ALL'ISTANZA
-    
+        var data = response.getDataTable();
+        //data=new google.visualization.DataView(chart);
 
-      var data = response.getDataTable();
+        // CREO IL DATAVIEW
+        // var view = new google.visualization.DataView(data);
+        //data.setColumns([1]);
+       // view.hideColumns([0,1,2,3]);
 
-     
+        
 
-      // formatter
-      // PER I FORMATTERR VEDERE QUI:  https://developers.google.com/chart/interactive/docs/reference#arrowformatter
-      var formatter = new google.visualization.ColorFormat();
-        formatter.addRange(1, 50, 'green', 'orange');
-        formatter.addRange(51, 110, 'pink', '#33ff33');
+        // formatter
+        // PER I FORMATTERR VEDERE QUI:  https://developers.google.com/chart/interactive/docs/reference#arrowformatter
+        var formatter = new google.visualization.ColorFormat();
+        formatter.addRange(1, 50, "green", "orange");
+        formatter.addRange(51, 110, "pink", "#33ff33");
         formatter.format(data, 4); // Apply formatter to second column
 
-    /*   var formatter = new google.visualization.ArrowFormat({
+        /*   var formatter = new google.visualization.ArrowFormat({
         base:30
       });
         formatter.format(data, 2); */
 
-  var formatter = new google.visualization.BarFormat({
-    base:30,
-    width: 80,
-    showValue:true
-  });
-      formatter.format(data, 4);
+        var formatter = new google.visualization.BarFormat({
+          base: 30,
+          width: 80,
+          showValue: true,
+        });
+        formatter.format(data, 4);
 
-  //PATTERNFORMAT PER INSERIRE I FORMATI
-  // VEDERE QUI: https://stackoverflow.com/questions/37249763/how-to-combine-number-and-pattern-formatters-in-google-visualization
-  // VEDERE ANCHE QUI IN QUANTO VENGONO GENERATI ERRORI: https://github.com/FERNman/angular-google-charts/issues/193
+        //PATTERNFORMAT PER INSERIRE I FORMATI
+        // VEDERE QUI: https://stackoverflow.com/questions/37249763/how-to-combine-number-and-pattern-formatters-in-google-visualization
+        // VEDERE ANCHE QUI IN QUANTO VENGONO GENERATI ERRORI: https://github.com/FERNman/angular-google-charts/issues/193
 
-     /*  var formatter = new google.visualization.PatternFormat(
+        /*  var formatter = new google.visualization.PatternFormat(
          '<a href="mailto:{1}">{5}</a>'
       //'<a href="http://somelink/{0}">{1}</a>'
       );
     formatter.format(data, [0,5]); */
 
+        // VEDERE QUI: https://developers.google.com/chart/interactive/docs/reference?hl=en#patternformat
+        var formatter = new google.visualization.PatternFormat(
+          //'<a href="{0}" target="_blank" rel="external nofollow" >Link</a>'
+          //'<a href="mailto:{9}">{9}</a>'
+          '<a href="{0}" target="_blank">{1}</a>'
+        );
+        // formatter.format(data, [Indice_della_prima_colonna, indice_della_seconda_colonna], colonna_finale)
+        formatter.format(data, [5, 1], 11);
 
-    // VEDERE QUI: https://developers.google.com/chart/interactive/docs/reference?hl=en#patternformat
-     var formatter = new google.visualization.PatternFormat(
-      //'<a href="{0}" target="_blank" rel="external nofollow" >Link</a>'
-      //'<a href="mailto:{9}">{9}</a>'
-      '<a href="{0}" target="_blank">{1}</a>'
-      
-      
-      ); 
-      // formatter.format(data, [Indice_della_prima_colonna, indice_della_seconda_colonna], colonna_finale)
-      formatter.format(data, [5,1], 11);
+        // FORMATTER PER DATA: https://developers.google.com/chart/interactive/docs/reference#numberformat
+        var formatter = new google.visualization.DateFormat({
+          pattern: "short",
+        });
+        formatter.format(data, 2);
 
+        var formatter = new google.visualization.NumberFormat({
+          prefix: "$",
+          negativeColor: "red",
+          negativeParens: true,
+        });
+        formatter.format(data, 7);
 
-    // FORMATTER PER DATA: https://developers.google.com/chart/interactive/docs/reference#numberformat
-    var formatter = new google.visualization.DateFormat({
-    pattern: 'short'
-  });
-  formatter.format(data, 2);
-
-  var formatter = new google.visualization.NumberFormat(
-    {prefix: '$', 
-    negativeColor: 'red', 
-      negativeParens: true});
-  formatter.format(data, 7);
-
- /* var formatter=new google.visualization.DataView({
+        /* var formatter=new google.visualization.DataView({
   allowHtml:true
   });
       formatter.format(data, 5);  */
 
-    
-  // 8) INSERISCE LA CHART ALL'INTERNO DEL DIV
-      var chart = new google.visualization.Table(document.getElementById('chart_div'));
+        // 8) INSERISCE LA CHART ALL'INTERNO DEL DIV
+        var chart = new google.visualization.Table(
+          document.getElementById("chart_div")
+        );
+        
+        // 8 BIS) INSERISCE IL DATAVIEW ALL'INTERNO DEL DIV 
+      /*   var view = new google.visualization.DataView(
+          document.getElementById("view_div")
+        ); */
 
-      // Create a view VEDERE LE CLASSI: https://developers.google.com/chart/interactive/docs/reference#arrowformatter
-/* var view = new google.visualization.DataView(data);
+        //var view = new google.visualization.DataView(chart);
+
+        // Create a view VEDERE LE CLASSI: https://developers.google.com/chart/interactive/docs/reference#arrowformatter
+        /* var view = new google.visualization.DataView(data);
       chart.draw(view, {sortRows: 7}); */
 
+        // 9) DISEGNA LA CHART ED ASSEGNA IL DATA FORMAT
 
+        // VARIABILI PER LE OPZIONI
+        var cssClassNames = {
+          // 'height':50,
+          // SETUP DELLE DIMENSIONI DEL CONTENITORE
+
+          // SETUP DELLE RIGHE  -vedere qui: https://developers.google.com/chart/interactive/docs/gallery/table?hl=en
+          headerRow: "cssHeaderRow",
+          tableRow: "cssTableRow",
+          oddTableRow: "cssOddTableRow",
+          selectedTableRow: "cssSelectedTableRow",
+          hoverTableRow: "cssHoverTableRow",
+          headerCell: "cssHeaderCell",
+          tableCell: "cssTableCell",
+          rowNumberCell: "cssRowNumberCell",
+        };
+
+        var options = {
+          showRowNumber: true,
+          cssClassNames: cssClassNames,
+          alternatingRowStyle: true,
+          allowHtml: true,
+        };
+        
+        // https://developers.google.com/chart/interactive/docs/gallery/table
+        chart.draw(data, options);
+       // view.draw(data, options);
       
-      // 9) DISEGNA LA CHART ED ASSEGNA IL DATA FORMAT 
-      // https://developers.google.com/chart/interactive/docs/gallery/table
-      chart.draw(data, {allowHtml:true, width: '80%', height: '50%'});
-    }
-
-
+       
+      }
     </script>
-
-    
   </head>
 
   <body>
     <!--Div that will hold the dashboard-->
-    <div style="margin: auto;">
+    <div style="margin: auto">
       <h1>PROVA 1, 2, 3 ............</h1>
-    </div>  
-    <div id="dashboard_div" style="margin: auto; opacity:0.7">
+    </div>
+    <div id="dashboard_div">
       <!--Divs that will hold each control and chart-->
-      <div id="filter_div"></div>
-      <div id="chart_div"></div>
+      <div id="filter_div" class="tableDraw">
+        <div id="chart_div"></div>
+        <div id="view_div"></div>
+      </div>
     </div>
     <div>
       <h1>PROVA 1, 2, 3 ............</h1>
-    </div>  
-    
+    </div>
+
+    <style>
+      #dashboard_div {
+        margin: auto;
+        opacity: 0.7;
+        background-color: #881010;
+        resize: both;
+      }
+      .tableDraw {
+        height: max-content;
+      }
+      .cssHeaderRow {
+        background-color: #30d62a;
+        height: auto !important;
+      }
+      .cssTableRow {
+        background-color: #367ec5;
+        font-size: 8px;
+      }
+      .cssOddTableRow {
+        background-color: #256cb3;
+        height: auto;
+      }
+      .cssSelectedTableRow {
+        font-size: 8px;
+        font-weight: bold;
+        height: auto !important;
+      }
+      .cssHoverTableRow {
+        background: rgb(199, 47, 47);
+      }
+      .cssHeaderCell {
+        color: #ffffff;
+        font-size: small-font;
+        padding: 1px !important;
+        border: solid 1px #ffffff;
+      }
+      .cssTableCell {
+        font-size: 12px;
+        padding: 1px !important;
+        border: dotted 1px #881010;
+        height: 1px;
+      }
+      .cssRowNumberCell {
+        text-align: center;
+      }
     </style>
   </body>
 </html>
+
