@@ -1,34 +1,15 @@
 <!DOCTYPE html>
 <html style="background-color: lightgrey">
-  <head>
-    <!--Load the AJAX API-->
-    <!-- VEDERE STEP BY STEP: https://developers.google.com/chart/interactive/docs/basic_load_libs -->
-    <!-- 1) CARICA IL WEBPACK - ANCHE SE VI SONO PIU' CHART VA CARICATO SOLTANTO UNA VOLTA -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations.min.js"></script> -->
+ <head>
+    
+    <script src="https://www.gstatic.com/charts/loader.js"
+  ></script>
 
-    <script></script>
-    <script
-      type="text/javascript"
-      src="https://www.gstatic.com/charts/loader.js"
-    ></script>
-    <script type="text/javascript">
-      // 2) Load the Visualization API and the controls package
-      // 2 BIS) PER VEDERE I TIPI DI CHART: https://developers.google.com/chart/interactive/docs/gallery/table
-      google.charts.load("current", { packages: ["table"] });
+<script type='text/javascript'>
+google.charts.load("current", { packages: ["table"] });
+google.charts.setOnLoadCallback(drawVisualization);
 
-      // 3) Set a callback to run when the Google Visualization API is loaded. VEDERE QUI: https://developers.google.com/chart/interactive/docs/basic_load_libs#Callback
-      google.charts.setOnLoadCallback(drawSheetName);
-
-      // 4) Callback that creates and populates a data table,
-      // instantiates a dashboard, a range slider and a pie chart,
-      // passes in the data and draws it.
-
-      // 5)  RECUPERARE I DATI IN REMOTO. VEDERE QUI: https://developers.google.com/chart/interactive/docs/spreadsheets#sheet-name
-      // PER IMPOSTAZIONE GENERALE VEDERE QUI: https://developers.google.com/chart/interactive/docs/basic_preparing_data
-
-      // ATTENZIONE QUANDO IL DATO E' IN REMOTO VA INSTANZIATA UNA QUERY (QUESTA FUNZIONE ALLA QUALE POI VERRA' DATA LA RISPOSTA IN VAR DATA=RESPONSE.GETDATATABLE())
-
-      function drawSheetName() {
+  function drawVisualization() {
         const url = "https://docs.google.com/spreadsheets/d/";
         const ssid = "1VpvFEYZZu5lu9qCkRwXlOkZxLHBkiGcytF8O1w-5bBA";
         const q1 = "/gviz/tq?";
@@ -57,110 +38,8 @@
           return;
         }
 
-        // 5 bis) RISPOSTA DELLA QUERY
-        /*   var data = response.getDataTable();
-      visualization = new google.visualization.Table(document.getElementById('visualization'));
-      visualization.draw(data,
-           {title:"Response Graph for "+document.myform.ansSet.value,
-            width:600, height:400,
-			legend:'none',
-            vAxis: {title: "Answer Options"},
-            hAxis: {title: "Responses"}}
-      ); */
 
-        // 6) CUSTOMIZE THE CHART: https://developers.google.com/chart/interactive/docs/basic_customizing_chart
-
-        // 6 bis) PER I DETTAGLI SU LE OPTION PER TABLE VEDERE QUI: https://developers.google.com/chart/interactive/docs/gallery/table
-        // VEDERE QUI PER I SETTINGS: https://developers.google.com/chart/interactive/docs/reference
-
-        // 7) RISPOSTA ALL'ISTANZA
-
-        var data = response.getDataTable();
-        //data=new google.visualization.DataView(chart);
-
-        // CREO IL DATAVIEW
-        // var view = new google.visualization.DataView(data);
-        //data.setColumns([1]);
-       // view.hideColumns([0,1,2,3]);
-
-        
-
-        // formatter
-        // PER I FORMATTERR VEDERE QUI:  https://developers.google.com/chart/interactive/docs/reference#arrowformatter
-        var formatter = new google.visualization.ColorFormat();
-        formatter.addRange(1, 50, "green", "orange");
-        formatter.addRange(51, 110, "pink", "#33ff33");
-        formatter.format(data, 4); // Apply formatter to second column
-
-        /*   var formatter = new google.visualization.ArrowFormat({
-        base:30
-      });
-        formatter.format(data, 2); */
-
-        var formatter = new google.visualization.BarFormat({
-          base: 30,
-          width: 80,
-          showValue: true,
-        });
-        formatter.format(data, 4);
-
-        //PATTERNFORMAT PER INSERIRE I FORMATI
-        // VEDERE QUI: https://stackoverflow.com/questions/37249763/how-to-combine-number-and-pattern-formatters-in-google-visualization
-        // VEDERE ANCHE QUI IN QUANTO VENGONO GENERATI ERRORI: https://github.com/FERNman/angular-google-charts/issues/193
-
-        /*  var formatter = new google.visualization.PatternFormat(
-         '<a href="mailto:{1}">{5}</a>'
-      //'<a href="http://somelink/{0}">{1}</a>'
-      );
-    formatter.format(data, [0,5]); */
-
-        // VEDERE QUI: https://developers.google.com/chart/interactive/docs/reference?hl=en#patternformat
-        var formatter = new google.visualization.PatternFormat(
-          //'<a href="{0}" target="_blank" rel="external nofollow" >Link</a>'
-          //'<a href="mailto:{9}">{9}</a>'
-          '<a href="{0}" target="_blank">{1}</a>'
-        );
-        // formatter.format(data, [Indice_della_prima_colonna, indice_della_seconda_colonna], colonna_finale)
-        formatter.format(data, [5, 1], 11);
-
-        // FORMATTER PER DATA: https://developers.google.com/chart/interactive/docs/reference#numberformat
-        var formatter = new google.visualization.DateFormat({
-          pattern: "short",
-        });
-        formatter.format(data, 2);
-
-        var formatter = new google.visualization.NumberFormat({
-          prefix: "$",
-          negativeColor: "red",
-          negativeParens: true,
-        });
-        formatter.format(data, 7);
-
-        /* var formatter=new google.visualization.DataView({
-  allowHtml:true
-  });
-      formatter.format(data, 5);  */
-
-        // 8) INSERISCE LA CHART ALL'INTERNO DEL DIV
-        var chart = new google.visualization.Table(
-          document.getElementById("chart_div")
-        );
-        
-        // 8 BIS) INSERISCE IL DATAVIEW ALL'INTERNO DEL DIV 
-      /*   var view = new google.visualization.DataView(
-          document.getElementById("view_div")
-        ); */
-
-        //var view = new google.visualization.DataView(chart);
-
-        // Create a view VEDERE LE CLASSI: https://developers.google.com/chart/interactive/docs/reference#arrowformatter
-        /* var view = new google.visualization.DataView(data);
-      chart.draw(view, {sortRows: 7}); */
-
-        // 9) DISEGNA LA CHART ED ASSEGNA IL DATA FORMAT
-
-        // VARIABILI PER LE OPZIONI
-        var cssClassNames = {
+              var cssClassNames = {
           // 'height':50,
           // SETUP DELLE DIMENSIONI DEL CONTENITORE
 
@@ -181,17 +60,44 @@
           alternatingRowStyle: true,
           allowHtml: true,
         };
-        
-        // https://developers.google.com/chart/interactive/docs/gallery/table
-        chart.draw(data, options);
-       // view.draw(data, options);
-      
-       
-      }
-    </script>
-  </head>
 
-  <body>
+ 	var data = response.getDataTable();
+
+     var formatter = new google.visualization.BarFormat({
+          base: 30,
+          width: 80,
+          showValue: true,
+        });
+        formatter.format(data, 4);
+
+      // formatter
+        // PER I FORMATTERR VEDERE QUI:  https://developers.google.com/chart/interactive/docs/reference#arrowformatter
+        var formatter = new google.visualization.ColorFormat();
+        formatter.addRange(1, 50, "green", "orange");
+        formatter.addRange(51, 110, "pink", "#33ff33");
+        formatter.format(data, 4); // Apply formatter to second column
+
+         // VEDERE QUI: https://developers.google.com/chart/interactive/docs/reference?hl=en#patternformat
+         var formatter = new google.visualization.PatternFormat(
+          //'<a href="{0}" target="_blank" rel="external nofollow" >Link</a>'
+          //'<a href="mailto:{9}">{9}</a>'
+          '<a href="{0}" target="_blank">{1}</a>'
+        );
+        // formatter.format(data, [Indice_della_prima_colonna, indice_della_seconda_colonna], colonna_finale)
+        formatter.format(data, [5, 1], 11);
+
+	var view = new google.visualization.DataView(data);
+		view.setColumns([0,1,2,3,4,5,6,7,11]);
+  	var chart = new google.visualization.Table(document.getElementById('visualization')); 
+ chart.draw(view, options);
+ }
+ </script>
+
+
+
+ <!-- // ______________________________________ -->
+
+ <body>
     <!--Div that will hold the dashboard-->
     <div style="margin: auto">
       <h1>PROVA 1, 2, 3 ............</h1>
@@ -200,7 +106,7 @@
       <!--Divs that will hold each control and chart-->
       <div id="filter_div" class="tableDraw">
         <div id="chart_div"></div>
-        <div id="view_div"></div>
+        <div id="visualization"></div>
       </div>
     </div>
     <div>
@@ -255,4 +161,5 @@
     </style>
   </body>
 </html>
+
 
